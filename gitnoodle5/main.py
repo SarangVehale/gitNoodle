@@ -1,3 +1,4 @@
+
 import os
 import requests
 import zipfile
@@ -49,11 +50,11 @@ def download_repo(url):
     return extracted_folder, temp_dir
 
 def generate_description_with_ollama(content):
-    """Generate a description using Ollama."""
+    """Generate a simple, one-line description using Ollama."""
     try:
         response = ollama.generate(
             model="llama3.2",  # Use the desired Ollama model
-            prompt=f"Describe the purpose of the following code or file:\n\n{content}\n\nDescription:"
+            prompt=f"Describe the purpose of the following code or file in one short sentence:\n\n{content}\n\nDescription:"
         )
         return response["response"].strip()
     except Exception as e:
@@ -61,19 +62,19 @@ def generate_description_with_ollama(content):
         return None
 
 def extract_file_description(file_path):
-    """Extract description from file content using Ollama."""
+    """Extract a simple description from file content using Ollama."""
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
         
-        # Generate description using Ollama
+        # Generate a simple description using Ollama
         description = generate_description_with_ollama(content)
         return description
     except Exception:
         return None
 
 def extract_directory_description(dir_path):
-    """Extract description from a README.md or DESCRIPTION.txt file."""
+    """Extract a simple description from a README.md or DESCRIPTION.txt file."""
     readme_path = os.path.join(dir_path, "README.md")
     description_path = os.path.join(dir_path, "DESCRIPTION.txt")
     
@@ -92,7 +93,7 @@ def extract_directory_description(dir_path):
     return None
 
 def print_structure(path, base_path, indent=0):
-    """Recursively print directory structure with descriptions."""
+    """Recursively print directory structure with simple descriptions."""
     for item in sorted(os.listdir(path)):
         item_path = os.path.join(path, item)
         description = None
